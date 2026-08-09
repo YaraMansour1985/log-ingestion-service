@@ -7,8 +7,8 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "migrate": "node-pg-migrate",
-    "test": "dotenv -e .env.test -- vitest run"
+    "migrate": "node-pg-migrate up",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
