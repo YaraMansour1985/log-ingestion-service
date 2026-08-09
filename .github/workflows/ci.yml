@@ -10,6 +10,24 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: logs_user
+          POSTGRES_PASSWORD: logs_password
+          POSTGRES_DB: logs_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U logs_user -d logs_db"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://logs_user:logs_password@localhost:5432/logs_db
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,6 +43,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Run migrations
+        run: npm run migrate
 
       - name: Test
         run: npm test
